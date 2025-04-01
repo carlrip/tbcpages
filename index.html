@@ -21,10 +21,15 @@
         // let handle = await document.requestStorageAccess({
         //   localStorage: true,
         // });
-        let handle = await document.requestStorageAccess();
-        console.log("requestStorageAccess handle", handle);
-        const storage = handle ? handle.localStorage : localStorage;
-        return storage;
+        try {
+          let handle = await document.requestStorageAccess();
+          console.log("requestStorageAccess handle", handle);
+          const storage = handle ? handle.localStorage : localStorage;
+          return storage;
+        } catch (err) {
+          console.error("requestStorageAccess errored", err);
+        }
+        
       }
       (async function () {
         const hasAccess = await document.hasStorageAccess();
