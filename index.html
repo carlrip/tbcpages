@@ -1,21 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simple HTML Page</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0.25rem;
+        font-family: monospace;
+        display: flex;
+        justify-content: center;
+        background-color: rgb(242, 242, 252);
+        color: black;
+      }
+    </style>
+    <title>Shared state</title>
   </head>
-  <body>
-    <header>
-      <h1>Welcome to My Simple HTML Page</h1>
-    </header>
+    <p id="state"></p>
+    <script>
+      (async function () {
+        const hasAccess = await document.hasStorageAccess();
+        console.log("document.hasStorageAccess", hasAccess);
 
-    <main>
-      <p>This is a basic HTML structure to get you started!</p>
-    </main>
+        const handle = await document.requestStorageAccess({
+          localStorage: true,
+        });
+        console.log("requestStorageAccess handle", handle);
 
-    <footer>
-      <p>&copy; 2025 My Website</p>
-    </footer>
+        const KEY = "state";
+        function getState() {
+          try {
+            return localStorage.getItem(KEY);
+          } catch (err) {
+            console.error("Problem accessing local storage", err);
+          }
+        }
+        function setState(state) {
+          try {
+            localStorage.setItem(KEY, JSON.stringify(state));
+          } catch (err) {
+            console.error("Problem setting local storage", state, err);
+          }
+        }
+        function showState() {
+          const state = document.getElementById("state");
+          state.textContent = JSON.stringify(getState());
+        }
+
+        showState();
+
+        console.log("State is listening for messages ...");
+        window.addEventListener("message", (event) => {
+          //   console.log("Message received", event);
+          if (event.data.type === "SET_STATE") {
+            setState(event.data.data);
+            showState();
+          }
+          if (event.data.type === "GET_STATE") {
+            event.source.postMessage(
+                {
+                  type: "GET_STATE_RETURN",
+                  data: getState()
+                },
+                "*"
+              );
+          }
+        });
+      })();
+    </script>
+   
   </body>
 </html>
