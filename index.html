@@ -18,9 +18,10 @@
     <button id="requestAccess" style="display: none;">Request access</button>
     <script>
       async function getStorage() {
-        let handle = await document.requestStorageAccess({
-          localStorage: true,
-        });
+        // let handle = await document.requestStorageAccess({
+        //   localStorage: true,
+        // });
+        let handle = await document.requestStorageAccess();
         console.log("requestStorageAccess handle", handle);
         const storage = handle ? handle.localStorage : localStorage;
         return storage;
