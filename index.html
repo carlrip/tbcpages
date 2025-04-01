@@ -29,7 +29,7 @@
         const KEY = "state";
         function getState() {
           try {
-            return storage.getItem(KEY);
+            return storage.getItem(KEY) ?? {};
           } catch (err) {
             console.error("Problem accessing local storage", err);
           }
