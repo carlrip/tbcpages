@@ -20,22 +20,26 @@
         const hasAccess = await document.hasStorageAccess();
         console.log("document.hasStorageAccess", hasAccess);
 
-        const handle = await document.requestStorageAccess({
+        let handle = await document.requestStorageAccess({
           localStorage: true,
         });
         console.log("requestStorageAccess handle", handle);
+        if (handle === undefined) {
+            console.log("Setting handle to localStorage because undefined");
+            handle = localStorage; 
+        }
 
         const KEY = "state";
         function getState() {
           try {
-            return localStorage.getItem(KEY);
+            return handle.getItem(KEY);
           } catch (err) {
             console.error("Problem accessing local storage", err);
           }
         }
         function setState(state) {
           try {
-            localStorage.setItem(KEY, JSON.stringify(state));
+            handle.setItem(KEY, JSON.stringify(state));
           } catch (err) {
             console.error("Problem setting local storage", state, err);
           }
