@@ -24,22 +24,19 @@
           localStorage: true,
         });
         console.log("requestStorageAccess handle", handle);
-        if (handle === undefined) {
-            console.log("Setting handle to localStorage because undefined");
-            handle = localStorage; 
-        }
-
+        const storage = handle ? handle.localStorage : localStorage;
+ 
         const KEY = "state";
         function getState() {
           try {
-            return handle.getItem(KEY);
+            return storage.getItem(KEY);
           } catch (err) {
             console.error("Problem accessing local storage", err);
           }
         }
         function setState(state) {
           try {
-            handle.setItem(KEY, JSON.stringify(state));
+            storage.setItem(KEY, JSON.stringify(state));
           } catch (err) {
             console.error("Problem setting local storage", state, err);
           }
