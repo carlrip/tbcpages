@@ -29,14 +29,14 @@
         const hasAccess = await document.hasStorageAccess();
         console.log("document.hasStorageAccess", hasAccess);
         const requestAccessBtn = document.getElementById("requestAccess")
-        requestAccessBtn.style = haveAccess ? "display: none;" : "display: block;"
+        requestAccessBtn.style = hasAccess ? "display: none;" : "display: block;"
         function handleRequestAccessClick() {
           console.log("Requesting access from button event");
           getStorage();
         }
         requestAccessBtn.addEventListener("click", handleRequestAccessClick);
 
-      })()
+      })();
       (async function () {
         const hasAccess = await document.hasStorageAccess();
         console.log("document.hasStorageAccess", hasAccess);
