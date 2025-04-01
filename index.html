@@ -15,16 +15,38 @@
     <title>Shared state</title>
   </head>
     <p id="state"></p>
+    <button id="requestAccess" style="display: none;">Request access</button>
     <script>
-      (async function () {
-        const hasAccess = await document.hasStorageAccess();
-        console.log("document.hasStorageAccess", hasAccess);
-
+      async function getStorage() {
         let handle = await document.requestStorageAccess({
           localStorage: true,
         });
         console.log("requestStorageAccess handle", handle);
         const storage = handle ? handle.localStorage : localStorage;
+        return storage;
+      }
+      (async function () {
+        const hasAccess = await document.hasStorageAccess();
+        console.log("document.hasStorageAccess", hasAccess);
+        const requestAccessBtn = document.getElementById("requestAccess")
+        requestAccessBtn.style = haveAccess ? "display: none;" : "display: block;"
+        function handleRequestAccessClick() {
+          console.log("Requesting access from button event");
+          getStorage();
+        }
+        requestAccessBtn.addEventListener("click", handleRequestAccessClick);
+
+      })()
+      (async function () {
+        const hasAccess = await document.hasStorageAccess();
+        console.log("document.hasStorageAccess", hasAccess);
+
+        // let handle = await document.requestStorageAccess({
+        //   localStorage: true,
+        // });
+        // console.log("requestStorageAccess handle", handle);
+        // const storage = handle ? handle.localStorage : localStorage;
+        const storage = await getStorage();
  
         const KEY = "state";
         function getState() {
